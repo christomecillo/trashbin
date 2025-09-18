@@ -12,66 +12,91 @@
   </header>
 
   <div class="container">
-    <!-- Sensor Status -->
-    <div class="card">
-      <h2>Sensor Status</h2>
-      <div class="status">Bin Fill Level:</div>
-      <div class="progress">
-        <div class="progress-bar" id="fillLevel">40%</div>
-      </div>
-      <div class="status">Weight: <span id="weight">2.3 kg</span></div>
-      <div class="status">Last Opened: <span id="lastOpened">Just now</span></div>
-      <div class="threshold">
-        <label for="thresholdInput">Set Threshold (%):</label>
-        <input type="number" id="thresholdInput" min="10" max="100" value="80"/>
-      </div>
-      <div id="alertBox" class="alert hidden">
-        ⚠️ Trash bin reached threshold!
-        <button id="notifyBtn">Notify Collector</button>
-      </div>
-    </div>
-
-    <!-- Insights -->
-    <div class="card highlight">
-      <h2>Insights</h2>
-      <ul>
-        <li>Average Fill Level: <span id="avgFill">0%</span></li>
-        <li>Predicted Time to Full: <span id="timeToFull">Calculating...</span></li>
-        <li>Most Common Item: <span id="topItem">None</span></li>
-      </ul>
-      <canvas id="trendChart"></canvas>
-    </div>
-
-    <!-- Image Detection -->
+    <!-- AI Image Detection -->
     <div class="card">
       <h2>AI Image Detection</h2>
       <div class="image-preview" id="detectionPreview">No image detected yet.</div>
+      <div id="emojiLog" class="emoji-log"></div>
     </div>
 
-    <!-- Waste Sorting Statistics -->
-    <div class="card highlight">
-      <h2>Waste Sorting Statistics</h2>
-      <canvas id="wasteChart"></canvas>
-      <div class="status">Total Items: <span id="totalItems">0</span></div>
-    </div>
+    <!-- Two Bins Side by Side -->
+    <div class="bin-container">
+      <!-- Biodegradable Bin -->
+      <div class="card highlight bio">
+        <h2>Biodegradable Bin 🌱</h2>
+        <div class="status">Bin Fill Level:</div>
+        <div class="progress">
+          <div class="progress-bar" id="bioFillLevel">0%</div>
+        </div>
+        <div class="threshold">
+          <label for="bioThreshold">Set Threshold (%):</label>
+          <input type="number" id="bioThreshold" min="10" max="100" value="80"/>
+        </div>
+        <div id="bioAlert" class="alert hidden">
+          ⚠️ Biodegradable bin reached threshold! 
+          <button onclick="notifyCollector('bio')">Notify Collector</button>
+        </div>
 
-    <!-- Trash History -->
-    <div class="card wide-card">
-      <h2>Trash History</h2>
-      <table id="historyTable">
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>Item</th>
-            <th>Fill Level</th>
-            <th>Weight</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <div class="pagination">
-        <button id="prevBtn">⬅ Previous</button>
-        <button id="nextBtn">Next ➡</button>
+        <h3>Insights</h3>
+        <ul>
+          <li>Average Fill Level: <span id="bioAvgFill">0%</span></li>
+          <li>Predicted Time to Full: <span id="bioTimeToFull">Calculating...</span></li>
+          <li>Most Common Item: <span id="bioTopItem">None</span></li>
+        </ul>
+        <canvas id="bioTrendChart"></canvas>
+        <canvas id="bioPieChart"></canvas>
+
+        <h3>Trash History</h3>
+        <table id="bioHistory">
+          <thead>
+            <tr><th>Time</th><th>Item</th><th>Fill Level</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="pagination">
+          <button onclick="changePage('bio','prev')">⬅ Previous</button>
+          <span id="bioPageNum">Page 1</span>
+          <button onclick="changePage('bio','next')">Next ➡</button>
+        </div>
+      </div>
+
+      <!-- Non-Biodegradable Bin -->
+      <div class="card highlight nonbio">
+        <h2>Non-Biodegradable Bin 🗑️</h2>
+        <div class="status">Bin Fill Level:</div>
+        <div class="progress">
+          <div class="progress-bar" id="nonBioFillLevel">0%</div>
+        </div>
+        <div class="threshold">
+          <label for="nonBioThreshold">Set Threshold (%):</label>
+          <input type="number" id="nonBioThreshold" min="10" max="100" value="80"/>
+        </div>
+        <div id="nonBioAlert" class="alert hidden">
+          ⚠️ Non-biodegradable bin reached threshold! 
+          <button onclick="notifyCollector('nonBio')">Notify Collector</button>
+        </div>
+
+        <h3>Insights</h3>
+        <ul>
+          <li>Average Fill Level: <span id="nonBioAvgFill">0%</span></li>
+          <li>Predicted Time to Full: <span id="nonBioTimeToFull">Calculating...</span></li>
+          <li>Most Common Item: <span id="nonBioTopItem">None</span></li>
+        </ul>
+        <canvas id="nonBioTrendChart"></canvas>
+        <canvas id="nonBioPieChart"></canvas>
+
+        <h3>Trash History</h3>
+        <table id="nonBioHistory">
+          <thead>
+            <tr><th>Time</th><th>Item</th><th>Fill Level</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="pagination">
+          <button onclick="changePage('nonBio','prev')">⬅ Previous</button>
+          <span id="nonBioPageNum">Page 1</span>
+          <button onclick="changePage('nonBio','next')">Next ➡</button>
+        </div>
       </div>
     </div>
   </div>
@@ -81,8 +106,4 @@
 </body>
 </html>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="script.js"></script>
-</body>
-</html>
 
